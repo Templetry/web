@@ -1,0 +1,43 @@
+schema_version: 1
+name: web-vue-spa
+description: Vue 3 SPA — Vite + TypeScript, script setup, optional Router and Vitest
+platform: web
+framework: vue
+
+variables:
+  - key: project_name
+    label: Project name
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9 ]*$"
+
+identity:
+  - from: "Template App"           # page title, headings
+    to: "{project_name}"
+  - from: "TemplateApp"            # docs
+    to: "{project_name.pascal}"
+  - from: "template-app"           # package.json name
+    to: "{project_name.kebab}"
+
+features:
+  - key: router
+    label: Vue Router (routes under src/routes)
+    default: true
+    files:
+      - "src/main.router.ts"
+      - "src/routes/**"
+  - key: vitest
+    label: Vitest unit tests
+    default: true
+    files: ["src/lib/greet.test.ts"]
+
+presets:
+  - key: full
+    label: Everything on
+    features: {router: true, vitest: true}
+  - key: minimal
+    label: Bare SPA
+    features: {router: false, vitest: false}
+
+verify:
+  image: node:22
+  run: npm install && npm run build

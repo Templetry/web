@@ -1,0 +1,41 @@
+schema_version: 1
+name: web-nextjs
+description: Next.js app — App Router, TypeScript, route handler API, optional Vitest
+platform: web
+framework: nextjs
+
+variables:
+  - key: project_name
+    label: Project name
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9 ]*$"
+
+identity:
+  - from: "Template App"           # metadata title, headings
+    to: "{project_name}"
+  - from: "TemplateApp"            # docs
+    to: "{project_name.pascal}"
+  - from: "template-app"           # package.json name
+    to: "{project_name.kebab}"
+
+features:
+  - key: api_route
+    label: Example API route handler
+    default: true
+    files: ["src/app/api/**"]
+  - key: vitest
+    label: Vitest unit tests
+    default: true
+    files: ["src/lib/greet.test.ts"]
+
+presets:
+  - key: full
+    label: Everything on
+    features: {api_route: true, vitest: true}
+  - key: minimal
+    label: Pages only
+    features: {api_route: false, vitest: false}
+
+verify:
+  image: node:22
+  run: npm install && npm run build

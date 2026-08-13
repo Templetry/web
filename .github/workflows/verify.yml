@@ -10,12 +10,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  react-spa:
-    name: react-spa (${{ matrix.combo.name }})
+  forms:
+    name: ${{ matrix.form }} (${{ matrix.combo.name }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        form: [react-spa, vue-spa, nextjs]
         combo:
           - { name: full, preset: full, test: true }
           - { name: minimal, preset: minimal, test: false }
@@ -28,7 +29,7 @@ jobs:
           chmod +x /usr/local/bin/templetry
       - name: Render
         run: |
-          templetry render --template ./react-spa --out "$RUNNER_TEMP/out" \
+          templetry render --template "./${{ matrix.form }}" --out "$RUNNER_TEMP/out" \
             --set "project_name=Verify App" --preset "${{ matrix.combo.preset }}"
       - uses: actions/setup-node@v4
         with:

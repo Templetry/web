@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- tpl:if !router -->
+    <script type="module" src="/src/main.ts"></script>
+    <!-- tpl:endif -->
+    <!-- tpl:if router -->
+    <script type="module" src="/src/main.router.ts"></script>
+    <!-- tpl:endif -->
+  </body>
+</html>
