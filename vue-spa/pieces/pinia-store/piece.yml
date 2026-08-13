@@ -1,0 +1,8 @@
+schema_version: 1
+name: pinia-store
+description: Pinia store with a typed counter module (install with app.use(pinia))
+patches:
+  - file: package.json
+    op: add
+    path: /dependencies/pinia
+    value: "^2.3.0"

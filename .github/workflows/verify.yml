@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        form: [react-spa, vue-spa, nextjs]
+        form: [react-spa, vue-spa, nextjs, svelte-spa]
         combo:
           - { name: full, preset: full, test: true }
           - { name: minimal, preset: minimal, test: false }
@@ -44,9 +44,17 @@ jobs:
         working-directory: ${{ runner.temp }}/out
         run: npm test
 
-  react-spa-piece:
-    name: react-spa (minimal + axios-api piece)
+  pieces:
+    name: ${{ matrix.case.form }} + ${{ matrix.case.piece }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - { form: react-spa, piece: axios-api }
+          - { form: react-spa, piece: zustand-store }
+          - { form: vue-spa, piece: pinia-store }
+          - { form: nextjs, piece: zod-env }
     steps:
       - uses: actions/checkout@v4
       - name: Install templetry
@@ -56,10 +64,10 @@ jobs:
           chmod +x /usr/local/bin/templetry
       - name: Render and adopt the piece
         run: |
-          templetry render --template ./react-spa --out "$RUNNER_TEMP/out" \
+          templetry render --template "./${{ matrix.case.form }}" --out "$RUNNER_TEMP/out" \
             --set "project_name=Verify App" --preset minimal
-          templetry add axios-api "$RUNNER_TEMP/out" --template ./react-spa \
-            --set api_base=https://api.example.dev
+          templetry add "${{ matrix.case.piece }}" "$RUNNER_TEMP/out" \
+            --template "./${{ matrix.case.form }}"
       - uses: actions/setup-node@v4
         with:
           node-version: 22

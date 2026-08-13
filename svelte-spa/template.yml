@@ -1,0 +1,37 @@
+schema_version: 1
+name: web-svelte-spa
+description: Svelte 5 SPA — Vite + TypeScript, runes, optional Vitest
+platform: web
+framework: svelte
+
+variables:
+  - key: project_name
+    label: Project name
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9 ]*$"
+
+identity:
+  - from: "Template App"           # page title, headings
+    to: "{project_name}"
+  - from: "TemplateApp"            # docs
+    to: "{project_name.pascal}"
+  - from: "template-app"           # package.json name
+    to: "{project_name.kebab}"
+
+features:
+  - key: vitest
+    label: Vitest unit tests
+    default: true
+    files: ["src/lib/greet.test.ts"]
+
+presets:
+  - key: full
+    label: Everything on
+    features: {vitest: true}
+  - key: minimal
+    label: Bare SPA
+    features: {vitest: false}
+
+verify:
+  image: node:22
+  run: npm install && npm run build

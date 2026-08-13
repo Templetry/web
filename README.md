@@ -7,8 +7,21 @@ Web templates for [Templetry](https://github.com/Templetry). One **parent repo**
 | [`react-spa/`](react-spa/) | React SPA — Vite + TypeScript, optional Router and Vitest, presets `full`/`minimal` | ✅ ready |
 | [`vue-spa/`](vue-spa/) | Vue 3 SPA — Vite + TypeScript, `<script setup>`, optional Router and Vitest | ✅ ready |
 | [`nextjs/`](nextjs/) | Next.js app — App Router, TypeScript, optional route handler API and Vitest | ✅ ready |
+| [`svelte-spa/`](svelte-spa/) | Svelte 5 SPA — Vite + TypeScript, runes, optional Vitest | ✅ ready |
 
-Pieces (adopted after creation, [ADR-0014](https://github.com/Templetry/wiki/blob/main/adr/0014-lazy-pieces.md)): `react-spa` ships `axios-api`.
+Pieces (adopted after creation, [ADR-0014](https://github.com/Templetry/wiki/blob/main/adr/0014-lazy-pieces.md)):
+
+| Form | Piece | What it adds |
+|---|---|---|
+| `react-spa` | `axios-api` | Typed axios client under `src/api` |
+| `react-spa` | `zustand-store` | Zustand store with a typed counter slice |
+| `vue-spa` | `pinia-store` | Pinia store module |
+| `nextjs` | `zod-env` | Environment contract validated with zod at startup |
+
+```sh
+templetry pieces ./my-app          # what this project's template offers
+templetry add zustand-store ./my-app
+```
 
 ## Usage
 

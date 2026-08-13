@@ -1,0 +1,12 @@
+schema_version: 1
+name: zod-env
+description: Type-safe environment variables validated with zod at startup
+variables:
+  - key: env_prefix
+    label: Prefix for public client variables
+    default: NEXT_PUBLIC_
+patches:
+  - file: package.json
+    op: add
+    path: /dependencies/zod
+    value: "^3.24.0"

@@ -1,0 +1,12 @@
+schema_version: 1
+name: zustand-store
+description: Zustand global store with a typed counter slice (src/store)
+variables:
+  - key: initial_count
+    label: Initial counter value
+    default: "0"
+patches:
+  - file: package.json
+    op: add
+    path: /dependencies/zustand
+    value: "^5.0.0"
