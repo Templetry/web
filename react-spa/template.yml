@@ -1,0 +1,43 @@
+schema_version: 1
+name: web-react-spa
+description: React SPA starter — Vite + TypeScript, optional routing and tests
+platform: web
+framework: react
+
+variables:
+  - key: project_name
+    label: Project name
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9 ]*$"
+
+identity:
+  - from: "Template App"           # page title
+    to: "{project_name}"
+  - from: "TemplateApp"            # root component, docs
+    to: "{project_name.pascal}"
+  - from: "template-app"           # package.json name
+    to: "{project_name.kebab}"
+
+features:
+  - key: router
+    label: React Router (routes under src/routes)
+    default: true
+    files:
+      - "src/main.router.tsx"
+      - "src/routes/**"
+  - key: vitest
+    label: Vitest unit tests
+    default: true
+    files: ["src/lib/greet.test.ts"]
+
+presets:
+  - key: full
+    label: Everything on
+    features: {router: true, vitest: true}
+  - key: minimal
+    label: Bare SPA
+    features: {router: false, vitest: false}
+
+verify:
+  image: node:22
+  run: npm install && npm run build
