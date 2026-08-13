@@ -1,0 +1,12 @@
+schema_version: 1
+name: axios-api
+description: Typed axios API client under src/api
+variables:
+  - key: api_base
+    label: API base URL
+    default: /api
+patches:
+  - file: package.json
+    op: add
+    path: /dependencies/axios
+    value: "^1.7.0"

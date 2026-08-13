@@ -24,7 +24,7 @@ jobs:
       - name: Install templetry
         run: |
           curl -sL -o /usr/local/bin/templetry \
-            "https://github.com/Templetry/engine/releases/download/v1.3.0/templetry-linux-amd64"
+            "https://github.com/Templetry/engine/releases/download/v1.4.0/templetry-linux-amd64"
           chmod +x /usr/local/bin/templetry
       - name: Render
         run: |
@@ -42,3 +42,28 @@ jobs:
         if: matrix.combo.test
         working-directory: ${{ runner.temp }}/out
         run: npm test
+
+  react-spa-piece:
+    name: react-spa (minimal + axios-api piece)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install templetry
+        run: |
+          curl -sL -o /usr/local/bin/templetry \
+            "https://github.com/Templetry/engine/releases/download/v1.4.0/templetry-linux-amd64"
+          chmod +x /usr/local/bin/templetry
+      - name: Render and adopt the piece
+        run: |
+          templetry render --template ./react-spa --out "$RUNNER_TEMP/out" \
+            --set "project_name=Verify App" --preset minimal
+          templetry add axios-api "$RUNNER_TEMP/out" --template ./react-spa \
+            --set api_base=https://api.example.dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build augmented output
+        working-directory: ${{ runner.temp }}/out
+        run: |
+          npm install
+          npm run build
