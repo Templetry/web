@@ -1,8 +1,9 @@
 schema_version: 1
 name: web-react-spa
 description: React SPA starter — Vite + TypeScript, optional routing and tests
-platform: web
-framework: react
+kinds: [frontend]
+languages: [typescript]
+frameworks: [react, vite]
 
 variables:
   - key: project_name

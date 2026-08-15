@@ -1,8 +1,9 @@
 schema_version: 1
 name: web-nextjs
 description: Next.js app — App Router, TypeScript, route handler API, optional Vitest
-platform: web
-framework: nextjs
+kinds: [frontend, backend]
+languages: [typescript]
+frameworks: [nextjs, react]
 
 variables:
   - key: project_name

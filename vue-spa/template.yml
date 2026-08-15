@@ -1,8 +1,9 @@
 schema_version: 1
 name: web-vue-spa
 description: Vue 3 SPA — Vite + TypeScript, script setup, optional Router and Vitest
-platform: web
-framework: vue
+kinds: [frontend]
+languages: [typescript]
+frameworks: [vue, vite]
 
 variables:
   - key: project_name
