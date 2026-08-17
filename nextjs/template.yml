@@ -20,6 +20,21 @@ identity:
     to: "{project_name.kebab}"
 
 features:
+  - key: environments
+    label: development / staging / production profiles (ADR-0018)
+    default: true
+    files:
+      - "src/lib/config.ts"
+      - "src/lib/config.test.ts"
+      - ".env.development"
+      - ".env.staging"
+      - ".env.production"
+    patches:
+      - file: package.json
+        op: add
+        path: /scripts/build:staging
+        value: "APP_ENV=staging next build"
+
   - key: api_route
     label: Example API route handler
     default: true
@@ -32,10 +47,10 @@ features:
 presets:
   - key: full
     label: Everything on
-    features: {api_route: true, vitest: true}
+    features: {environments: true, api_route: true, vitest: true}
   - key: minimal
     label: Pages only
-    features: {api_route: false, vitest: false}
+    features: {environments: false, api_route: false, vitest: false}
 
 verify:
   image: node:22

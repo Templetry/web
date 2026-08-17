@@ -20,6 +20,21 @@ identity:
     to: "{project_name.kebab}"
 
 features:
+  - key: environments
+    label: development / staging / production profiles (ADR-0018)
+    default: true
+    files:
+      - "src/config.ts"
+      - "src/config.test.ts"
+      - ".env.development"
+      - ".env.staging"
+      - ".env.production"
+    patches:
+      - file: package.json
+        op: add
+        path: /scripts/build:staging
+        value: "tsc && vite build --mode staging"
+
   - key: router
     label: React Router (routes under src/routes)
     default: true
@@ -34,10 +49,10 @@ features:
 presets:
   - key: full
     label: Everything on
-    features: {router: true, vitest: true}
+    features: {environments: true, router: true, vitest: true}
   - key: minimal
     label: Bare SPA
-    features: {router: false, vitest: false}
+    features: {environments: false, router: false, vitest: false}
 
 verify:
   image: node:22
