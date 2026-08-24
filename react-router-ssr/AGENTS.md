@@ -23,10 +23,15 @@ Operating contract for AI agents and automation helpers working in this project.
 ## Required checks before finishing
 
 ```sh templetry:checks
+npm install
+npm run cf-typegen
 npm run build
+test -f build/server/index.js
 npm run typecheck
 npm test
 ```
+
+That `test -f` is not padding. A build with no server bundle exits zero.
 
 ## This project came from a template
 
