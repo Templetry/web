@@ -1,0 +1,55 @@
+schema_version: 1
+name: web-react-router-ssr
+description: React Router 8 with server rendering on Cloudflare Workers — indexable pages, typed bindings, Wrangler deploy
+kinds: [frontend, backend]
+languages: [typescript]
+frameworks: [react, react-router, vite, cloudflare-workers]
+
+variables:
+  - key: project_name
+    label: Project name
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9 ]*$"
+
+identity:
+  - from: "Template App"      # page title, headings
+    to: "{project_name}"
+  - from: "TemplateApp"
+    to: "{project_name.pascal}"
+  - from: "template-app"      # package.json name, worker name
+    to: "{project_name.kebab}"
+
+# Vitest is not a feature here. A file owned by two features is kept when either
+# is on, so config.test.ts under both "vitest" and "environments" left a test
+# importing a module that had been removed. Tests always ship instead.
+features:
+  - key: environments
+    label: development / staging / production profiles (ADR-0018)
+    default: true
+    files:
+      - "app/config.ts"
+      - "app/config.test.ts"
+    patches:
+      - file: package.json
+        op: add
+        path: /scripts/build:staging
+        value: "vite build --mode staging"
+
+presets:
+  - key: full
+    label: Everything on
+    features: {environments: true}
+  - key: minimal
+    label: Bare server-rendered app
+    features: {environments: false}
+
+# The build going green is not enough here, and this is the whole reason the
+# check is spelled out: removing `main` from wrangler.jsonc produces a green
+# build with no server bundle, which is a silent regression to client-only
+# rendering. If build/server/index.js is missing, the pages are not being
+# server-rendered no matter what the build said.
+verify:
+  image: node:22
+  # cf-typegen first: Env and ExportedHandler come from a generated file, and
+  # without it the typecheck fails on a project that is perfectly correct.
+  run: npm install && npm run cf-typegen && npm run build && test -f build/server/index.js && npm run typecheck && npm test

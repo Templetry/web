@@ -47,6 +47,40 @@ jobs:
         working-directory: ${{ runner.temp }}/out
         run: npm test
 
+  # Its own job rather than a row in the matrix above, because what has to be
+  # checked is not the exit code. Removing "main" from wrangler.jsonc makes the
+  # build go green and produce no server bundle at all — a silent regression to
+  # client-only rendering that takes every page out of search.
+  react-router-ssr:
+    name: react-router-ssr (${{ matrix.preset }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [full, minimal]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Templetry/.github/actions/setup-templetry@main
+      - name: Render
+        run: |
+          templetry render --template ./react-router-ssr --out "$RUNNER_TEMP/out" \
+            --set "project_name=Verify Site" --preset "${{ matrix.preset }}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build, and prove the server bundle exists
+        working-directory: ${{ runner.temp }}/out
+        run: |
+          npm install
+          npm run cf-typegen
+          npm run build
+          test -f build/server/index.js || {
+            echo "::error::the build produced no server bundle - the site would render client-side only"
+            exit 1
+          }
+          npm run typecheck
+          npm test
+
   pieces:
     name: ${{ matrix.case.form }} + ${{ matrix.case.piece }}
     runs-on: ubuntu-latest

@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "template-app",
+  "compatibility_date": "2026-08-20",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Never remove `main`. Without it the build goes green and produces no server
+  // bundle at all — a silent regression to client-only rendering that takes the
+  // pages out of search with no error anywhere.
+  "main": "./workers/app.ts",
+
+  "observability": { "enabled": true }
+}
